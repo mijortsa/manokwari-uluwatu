@@ -1,0 +1,35 @@
+<html>
+<head>
+<meta charset="utf-8"><!-- this is weather meta -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1" /> 
+	<link rel="stylesheet" href="css/desktop.css" />
+
+	<script type="text/javascript" src="js/jq.js"></script>
+	<script type="text/javascript" src="js/xml2json.js"></script>
+	<script type="text/javascript" src="js/xml-background.js"></script>
+	<script type="text/javascript" src="js/desktop.js"></script>
+	
+</head>
+
+<body>
+<div id="overlay"></div>
+<div id="bg"></div>
+<div id="base">
+    <!-- h1 id="debug"></h1 -->
+	<div id="launcher"></div>
+
+</div>
+
+<!--//fungsi disable tooltip-->
+<script>
+$(document).ready(function(){
+	$("*").attr("data-title", function() {
+		return $(this).attr("title");
+		});
+	$("*").removeAttr("title");
+});
+</script>
+
+</body>
+</html>

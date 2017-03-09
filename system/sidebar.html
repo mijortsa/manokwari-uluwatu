@@ -1,0 +1,336 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="text/javascript" src="js/jq.js"></script>
+</head>
+
+<body>
+
+<div id="sidebar-panel">
+	<div id="brightness">
+		<div class="setbrightness"><img src="img/brightness.svg"><span>Brightness adjustment</span>
+		<button class="button-down" href="#" value="" onclick="BrightnessDown()">-</button>
+		<button class="button-up" href="#" value="" onclick="BrightnessUp()">+</button>
+		</div>
+	</div>
+	<div id="logo"><img src="/usr/share/icons/Tebu-Flat/places/scalable/distributor-logo-blankon.svg"></div>
+		<div id="Desktop">Manokwari Desktop</div>
+		<div id="Distributor"></div>
+		<div id="Description"></div>
+		<div id="Release"></div>
+		<div id="Codename"></div>
+		<div id="Kernel"></div>
+</div>
+
+<style type='text/css'>
+body {
+	background-color: transparent;
+	overflow: hidden;
+	-webkit-user-select: none;
+	padding: 0px;
+	margin: 0px;
+	font-family: 'Aurulent Sans';
+}
+
+#sidebar-panel {
+	background-color: #111;
+	color: #aaa !important;
+	height: 100%;
+	width: 265px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	position:absolute;
+	z-index: 150;
+}
+#logo {
+	margin-top: 10px;
+	text-align: center;
+}
+#Desktop {
+	text-align: center;
+	padding-bottom: 5px;
+	margin: 0px 20px;
+	cursor: default;
+	color: #aaa !important;
+	font-family: 'Aurulent Sans';
+    font-size: 0.9em;
+    border-bottom: thin solid #333;
+}
+#brightness {
+	width: 100%;
+	height: auto;
+	background: transparent;
+	color: #ccc !important;
+	font-family: 'Aurulent Sans';
+    font-size: 12px;
+}
+.setbrightness {
+	width: 100%;
+	height: auto;
+	margin-top: 5px;
+	background: transparent;
+	cursor: default;
+}
+.setbrightness img {
+	margin-top: 3px;
+	float: left;
+	margin-left: 20px;
+}
+.setbrightness span {
+	margin-top: 3px;
+	float: left;
+	margin-left: 15px;
+	margin-right: 20px;
+	color: #ccc !important;
+	font-family: 'Aurulent Sans';
+    font-size: 12px;
+    cursor: default;
+}
+#brightness button {
+	margin-top: 0px;
+	width: 25px;
+	height: auto;
+	background-color: #333;
+	border: 1px solid #000;
+	border-radius: 2px;
+	color: #fff !important;
+	font-family: 'Aurulent Sans';
+    font-size: 12px;
+    cursor: pointer;
+    -webkit-transition: all 0.2s ease-in-out;
+}
+#brightness button:hover {
+	background-color: #555;
+	color: #fff !important;
+}
+
+#Distributor {
+	text-align: center;
+	margin: 5px 20px 0px 20px;
+	cursor: default;
+	color: #aaa !important;
+	font-family: 'Aurulent Sans';
+    font-size: 0.75em;
+}
+#Description, #Release {
+	text-align: center;
+	margin: 0px 20px;
+	cursor: default;
+	color: #aaa !important;
+	font-family: 'Aurulent Sans';
+    font-size: 0.75em;
+}
+#Codename {
+	text-align: center;
+	margin: 0px 20px 0px 20px;
+	padding-bottom: 5px;
+	cursor: default;
+	color: #aaa !important;
+	font-family: 'Aurulent Sans';
+    font-size: 0.75em;
+    border-bottom: thin solid #333;
+}
+#Kernel {
+	text-align: center;
+	margin: 5px 20px 0px 20px;
+	padding-bottom: 5px;
+	cursor: default;
+	color: #aaa !important;
+	font-family: 'Aurulent Sans';
+    font-size: 0.75em;
+}
+/*.ui-animation-slide {
+    -webkit-transition: all 0.2s ease-in-out;
+}*/
+
+/***********************
+ * Scrollbar *
+ * *********************/
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0); 
+    background: rgba(191,191,191,0);
+    border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+    background: rgba(191,191,191,0.04);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    border-radius: 0px;
+    background: rgba(191,191,191,0.1)
+}
+
+/***********************************
+ * Fonts Collections *
+ * *********************************/
+@font-face {
+    font-family: 'TrendexLightSSi.ttf';
+    src: url(../fonts/TrendexLightSSi.ttf);
+    font-weight: 600;
+}
+@font-face {
+    font-family: 'Aurulent Sans';
+    src: url(./fonts/AurulentSans-Regular.otf);
+    font-weight: 600;
+}
+@font-face {
+    font-family:'Ubuntu Condensed';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Ubuntu Condensed'), local('UbuntuCondensed-Regular'), url('./fonts/ubuntu.woff') format('woff');
+}
+
+</style>
+
+<script type="text/javascript">
+function BrightnessUp() {
+	Utils.run_command("xbacklight +10");
+}
+
+function BrightnessDown() {
+	Utils.run_command("xbacklight -10");
+}
+</script>
+
+<script type="text/javascript">
+
+function readDistributorText(){
+  var rawFileDistributor = new XMLHttpRequest();
+    rawFileDistributor.open("GET", "/tmp/release/distributor.txt", true);
+        rawFileDistributor.onreadystatechange = function (){
+          if(rawFileDistributor.readyState === 4){
+              var allText = rawFileDistributor.responseText;
+              document.getElementById("Distributor").innerHTML = allText;
+          }
+        }
+    rawFileDistributor.send();
+}
+
+function readDescriptionText(){
+  var rawFileDescription = new XMLHttpRequest();
+    rawFileDescription.open("GET", "/tmp/release/description.txt", true);
+        rawFileDescription.onreadystatechange = function (){
+          if(rawFileDescription.readyState === 4){
+              var allText = rawFileDescription.responseText;
+              document.getElementById("Description").innerHTML = allText;
+          }
+        }
+    rawFileDescription.send();
+}
+
+function readReleaseText(){
+  var rawFileRelease = new XMLHttpRequest();
+    rawFileRelease.open("GET", "/tmp/release/release.txt", true);
+        rawFileRelease.onreadystatechange = function (){
+          if(rawFileRelease.readyState === 4){
+              var allText = rawFileRelease.responseText;
+              document.getElementById("Release").innerHTML = allText;
+          }
+        }
+    rawFileRelease.send();
+}
+
+function readCodenameText(){
+  var rawFileCodename = new XMLHttpRequest();
+    rawFileCodename.open("GET", "/tmp/release/codename.txt", true);
+        rawFileCodename.onreadystatechange = function (){
+          if(rawFileCodename.readyState === 4){
+              var allText = rawFileCodename.responseText;
+              document.getElementById("Codename").innerHTML = allText;
+          }
+        }
+    rawFileCodename.send();
+}
+
+function readKernelText(){
+  var rawFileKernel = new XMLHttpRequest();
+    rawFileKernel.open("GET", "/tmp/release/kernel.txt", true);
+        rawFileKernel.onreadystatechange = function (){
+          if(rawFileKernel.readyState === 4){
+              var allText = rawFileKernel.responseText;
+              document.getElementById("Kernel").innerHTML = allText;
+          }
+        }
+    rawFileKernel.send();
+}
+
+$(document).ready(function() {
+	readDistributorText();
+	readDescriptionText();
+	readReleaseText();
+	readCodenameText();
+	readKernelText();
+});
+
+
+<!-- // Slider Animation if use HTML //  -->
+
+var anim = (function() {
+    var activePage = null;
+    var prepareShow = function() {
+        $("#sidebar-panel").css("right", "0px");
+    }
+
+    var prepareHide = function() {
+        changePage($("#sidebar-panel"), {
+            transition: "none"
+        });
+        $("#sidebar-panel").addClass("ui-animation-slide");
+        $("#sidebar-panel").css("right", "-" + window.outerWidth + "px");
+    }
+
+    var changePage = function(page) {
+        var withAnimation = true;
+        var width = window.outerWidth;
+
+        if (activePage == null) {
+            activePage = $("#sidebar-panel");
+            activePage.addClass("ui-animation-slide");
+        }
+
+        if (activePage == page) {
+            console.log("Trying to change to same page, exiting.");
+            return;
+        }
+
+        page.show();
+
+        if (withAnimation) {
+            page.addClass("ui-animation-slide");
+        }
+        page.css("right", "0px");
+        activePage = page;
+    }
+
+    var handleEsc = function(e) {
+        if (activePage != null) {
+            if (activePage.attr("id") != "sidebar-panel") {
+                changePage($("#sidebar-panel"));
+                return true;
+            }
+        }
+        return false; // Not handled
+    }
+
+    return {
+        handleEsc: handleEsc,
+        prepareHide: prepareHide,
+        prepareShow: prepareShow,
+    }
+})();
+
+</script>
+</body>
+
+</html>
